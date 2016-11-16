@@ -21,6 +21,9 @@
     <ClInclude Include="FloydWarshall.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FloydWarshall.cpp">
@@ -31,7 +34,12 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\..\..\..\..\Desktop\CongestedPathInput1.csv">
+    <ResourceCompile Include="CS5592Project.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CongestedPathInput1.csv">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>
