@@ -18,5 +18,13 @@
     <ClInclude Include="sample.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FloydWarshall.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="FloydWarshall.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
