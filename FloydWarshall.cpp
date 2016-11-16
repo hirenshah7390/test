@@ -1,6 +1,10 @@
 #include "FloydWarshall.h"
 #include <iostream>
 #include <fstream>
+#include <sstream>
+#include <stdio.h>
+#include <conio.h>
+using namespace std;
 FloydWarshall::FloydWarshall()
 {
 
@@ -21,6 +25,16 @@ int ** FloydWarshall::AdjacencyMatrix(int n)
 	}
 	return adj;
 }
+
+//void FloydWarshall::ReadInputFile(string filePath)
+//{
+//	ifstream file(filePath); 
+//	while (file.good())
+//	{
+//		getline(file, filePath, ','); 
+//		cout << string(filePath, 1, filePath.length() - 2);
+//	}
+//}
 
 
 
