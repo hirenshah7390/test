@@ -115,6 +115,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FloydWarshall.cpp" />
+    <ClCompile Include="scratchpad.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\..\..\..\Desktop\CongestedPathInput1.csv" />
