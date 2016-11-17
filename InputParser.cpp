@@ -12,7 +12,6 @@ InputParser::InputParser()
 {
 }
 
-
 InputParser::~InputParser()
 {
 }
@@ -24,7 +23,7 @@ void InputParser::ReadInputFile()
 	obj.edgeWeights = obj.AdjacencyMatrix(6);
 	obj.flowMatrix = obj.AdjacencyMatrix(6);
 	obj.capacityMatrix = obj.AdjacencyMatrix(6);
-
+	obj.hopCountMatrix = obj.AdjacencyMatrix(6);
 
 	if (file.good()) {
 		cout << "file exists";
@@ -115,7 +114,7 @@ int main()
 {
 	InputParser parser;
 	parser.ReadInputFile();
-	cout << "\nNumber of vertices are ";
+	cout << "\nNumber of vertices are N = ";
 	cout << obj.n;
 	cout << "\n";
 
@@ -126,18 +125,37 @@ int main()
 		cout << endl;
 	}
 
+	//Initialize hop count matrix
+	for (int i = 0; i < obj.n; i++)
+		for (int j = 0; j<obj.n; j++)
+			obj.hopCountMatrix[i][j] = 1;
+	for (int i = 0; i < obj.n; i++)
+		obj.hopCountMatrix[i][i] = 0;
+
+	//Intialize a matrix with edge weights to apply Floyd-Warshall logic. 
+	//We don't use edgeWeights matrix and overwrite it because we may need it for other approaches.
 	obj.allPairsShortestMatrix = obj.edgeWeights;
 	for (int k = 0; k < obj.n; k++)
 		for (int i = 0; i < obj.n; i++)
 			for (int j = 0; j < obj.n; j++)
-				if (obj.allPairsShortestMatrix[i][j]>obj.allPairsShortestMatrix[i][k] + obj.allPairsShortestMatrix[k][j])
+				if (obj.allPairsShortestMatrix[i][j] > obj.allPairsShortestMatrix[i][k] + obj.allPairsShortestMatrix[k][j]) {
 					obj.allPairsShortestMatrix[i][j] = obj.allPairsShortestMatrix[i][k] + obj.allPairsShortestMatrix[k][j];
+					obj.hopCountMatrix[i][j]+=1;
+				}
 
 	cout << "\nAll pairs shortest paths for single car without traffic using Floyd-Warshall algorithm is \n";
 	for (int i = 0; i < obj.n; i++) {
 		for (int j = 0; j < obj.n; j++)
 			cout << obj.allPairsShortestMatrix[i][j] << " ";
 			cout << endl;
+	}
+
+	//There is some bug in calculating hop counts, some hoop counts are not calculated correctly
+	cout << "\nHop count matrix is \n";
+	for (int i = 0; i < obj.n; i++) {
+		for (int j = 0; j < obj.n; j++)
+			cout << obj.hopCountMatrix[i][j] << " ";
+		cout << endl;
 	}
 	getchar();
 	return 0;

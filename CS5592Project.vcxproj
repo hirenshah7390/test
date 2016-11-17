@@ -133,6 +133,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="CongestedPathInput1.csv" />
+    <None Include="CongestedPathInput2.csv" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

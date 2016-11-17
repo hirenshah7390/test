@@ -48,5 +48,6 @@
     <None Include="CongestedPathInput1.csv">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="CongestedPathInput2.csv" />
   </ItemGroup>
 </Project>
