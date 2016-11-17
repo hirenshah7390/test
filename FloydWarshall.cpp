@@ -26,15 +26,23 @@ int ** FloydWarshall::AdjacencyMatrix(int n)
 	return adj;
 }
 
-//void FloydWarshall::ReadInputFile(string filePath)
-//{
-//	ifstream file(filePath); 
-//	while (file.good())
-//	{
-//		getline(file, filePath, ','); 
-//		cout << string(filePath, 1, filePath.length() - 2);
-//	}
-//}
+void FloydWarshall::ReadInputFile(string filePath)
+{
+	std::ifstream file(filePath);//"C://Users//hhstm4//Source//Repos//CS5592Project//CS5592Project//CongestedPathInput1.csv");
+
+	if (file.good()) {
+		cout << "file exists";
+	}
+	else {
+		cout << "file doesn't exist";
+	}
+
+	string value;
+	while (getline(file, value, ',')) {
+		cout << string(value, 1, value.length() - 2);
+	}
+	
+}
 
 
 

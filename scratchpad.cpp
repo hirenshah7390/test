@@ -7,18 +7,22 @@ using namespace std;
 int csvR()
 {
 	
-	std::ifstream file ("C:\\Users\\mom\\Google Drive\\fall 2016 semester\\design and analysis of algorithms\\my work\\my project\\CS5592Project\\CS5592Project\\CongestedPathInput1.csv");
-	if (file.good()) {
+	std::ifstream file ("C://Users//hhstm4//Source//Repos//CS5592Project//CS5592Project//CongestedPathInput1.csv");	
+
+	/*if (file.good()) {
 		cout << "file exists";
 	}
 	else {
 		cout << "file doesn't exist";
 	}
-	
-	string value;
-	cout<<"yepppppppppppppppppp";
-	while (getline(file, value, ',')) {
-		cout << string(value, 1, value.length() - 2);
+	*/
+	string value;	
+	while (getline(file, value, '\n')) {
+		if (value.find("E") != std::string::npos)
+		{
+			cout << string(value);
+			cout << "\n";
+		}
 	}
 	return 0;
 }

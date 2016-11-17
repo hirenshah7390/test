@@ -11,7 +11,7 @@ public:
 	FloydWarshall();
 	~FloydWarshall();
 	int ** AdjacencyMatrix(int);
-//	void ReadInputFile(string s);
+	void ReadInputFile(string s);
 
 };
 
