@@ -16,19 +16,30 @@ int csvR()
 		cout << "file doesn't exist";
 	}
 	*/
-	string value;	
+	string value;
+
+
+	string delimiter = ",";
 	while (getline(file, value, '\n')) {
 		if (value.find("E") != std::string::npos)
 		{
-			
-			cout << string(value);
+
+			size_t pos = 0;
+			string token;
+			value = value.substr(3, value.length() - 1);
+			while ((pos = value.find(delimiter)) != std::string::npos) {
+				token = value.substr(0, pos);
+				cout << token << endl;
+				value.erase(0, pos + delimiter.length());
+			}
+			cout << value << endl;
 			cout << "\n";
 		}
 	}
 	return 0;
 }
-int main() {
-	csvR();
-	getchar();
-	return 0;
-}
+//int main() {
+//	csvR();
+//	getchar();
+//	return 0;
+//}
