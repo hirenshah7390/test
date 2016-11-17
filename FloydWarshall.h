@@ -7,11 +7,10 @@ class FloydWarshall
 
 public:
 	int n, src, dest;
-	int ** edgeWeights, flowMatrix, capacityMatrix, loadMatrix, delayMatrix;
+	int ** edgeWeights, ** flowMatrix, ** capacityMatrix, ** loadMatrix, ** delayMatrix;
 	FloydWarshall();
 	~FloydWarshall();
 	int ** AdjacencyMatrix(int);
-	void ReadInputFile(string s);
-
+	void ReadInputFile(std::string);
 };
 

@@ -26,9 +26,13 @@ int ** FloydWarshall::AdjacencyMatrix(int n)
 	return adj;
 }
 
-void FloydWarshall::ReadInputFile(string filePath)
+void FloydWarshall::ReadInputFile(std::string filePath)
 {
-	std::ifstream file(filePath);//"C://Users//hhstm4//Source//Repos//CS5592Project//CS5592Project//CongestedPathInput1.csv");
+	ifstream file("C://Users//hhstm4//Source//Repos//CS5592Project//CS5592Project//CongestedPathInput1.csv");
+	edgeWeights = AdjacencyMatrix(6);
+	flowMatrix = AdjacencyMatrix(6);
+	capacityMatrix = AdjacencyMatrix(6);
+
 
 	if (file.good()) {
 		cout << "file exists";
@@ -38,9 +42,16 @@ void FloydWarshall::ReadInputFile(string filePath)
 	}
 
 	string value;
-	while (getline(file, value, ',')) {
-		cout << string(value, 1, value.length() - 2);
+	int i, j;
+	while (getline(file, value, '\n')) {
+		if (value.find("E") != string::npos)
+		{
+			
+			cout << string(value);
+			cout << "\n";
+		}
 	}
+	
 	
 }
 
