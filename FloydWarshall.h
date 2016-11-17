@@ -8,10 +8,10 @@ class FloydWarshall
 
 public:
 	int n, src, dest;
-	 int ** edgeWeights, ** flowMatrix, ** capacityMatrix, ** loadMatrix, ** delayMatrix;
+	 vector<vector<int>> edgeWeights, flowMatrix, capacityMatrix, loadMatrix, delayMatrix, allPairsShortestMatrix;
 	
 	FloydWarshall();
 	~FloydWarshall();
-	int ** AdjacencyMatrix(int);
+	vector<vector<int>> AdjacencyMatrix(int);
 };
 

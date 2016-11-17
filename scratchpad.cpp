@@ -7,7 +7,7 @@ using namespace std;
 int csvR()
 {
 	
-	std::ifstream file ("D:\\Projects\\DAA project\\CS5592Project\\CongestedPathInput1.csv");	
+	std::ifstream file ("C:\\Users\\mom\\Google Drive\\fall 2016 semester\\design and analysis of algorithms\\my work\\my project\\CS5592Project\\CS5592Project\\CongestedPathInput1.csv");
 
 	/*if (file.good()) {
 		cout << "file exists";
@@ -23,7 +23,6 @@ int csvR()
 	while (getline(file, value, '\n')) {
 		if (value.find("E") != std::string::npos)
 		{
-
 			size_t pos = 0;
 			string token;
 			value = value.substr(3, value.length() - 1);
