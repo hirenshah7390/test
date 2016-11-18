@@ -19,12 +19,12 @@ InputParser::~InputParser()
 //This function reads the file and saves the data in the matrices of EdgeWeight, FlowMatrix and CapacityMatrix.
 void InputParser::ReadInputFile()
 {
-	ifstream file("C:\\Users\\mom\\Google Drive\\fall 2016 semester\\design and analysis of algorithms\\my work\\my project\\CS5592Project\\CS5592Project\\CongestedPathInput1.csv");
+	ifstream file("C:\\Users\\mom\\Google Drive\\fall 2016 semester\\design and analysis of algorithms\\my work\\my project\\CS5592Project\\CS5592Project\\CongestedPathInput2.csv");
 	obj.edgeWeights = obj.AdjacencyMatrix(6);
 	obj.flowMatrix = obj.AdjacencyMatrix(6);
 	obj.capacityMatrix = obj.AdjacencyMatrix(6);
 	obj.hopCountMatrix = obj.AdjacencyMatrix(6);
-
+	
 	if (file.good()) {
 		cout << "file exists";
 		string value;
@@ -132,9 +132,23 @@ int main()
 	for (int i = 0; i < obj.n; i++)
 		obj.hopCountMatrix[i][i] = 0;
 
+	
+
 	//Intialize a matrix with edge weights to apply Floyd-Warshall logic. 
 	//We don't use edgeWeights matrix and overwrite it because we may need it for other approaches.
 	obj.allPairsShortestMatrix = obj.edgeWeights;
+
+	//One way to track hops and hopcount: create a temporary matrix to keep track of vertices in our path. Refer to CLRS Pg.697 "Pi matrix".
+	//obj.tempPiMatrix = obj.AdjacencyMatrix(6);
+	//for (int i = 0; i < obj.n; i++) {
+	//	for (int j = 0; j < obj.n; j++) {
+	//		if (i == j)
+	//			obj.tempPiMatrix[i][j] = 9999;
+	//		else
+	//			obj.tempPiMatrix[i][j] = i;
+	//	}
+	//}
+
 	for (int k = 0; k < obj.n; k++)
 		for (int i = 0; i < obj.n; i++)
 			for (int j = 0; j < obj.n; j++)
@@ -150,8 +164,8 @@ int main()
 			cout << endl;
 	}
 
-	//There is some bug in calculating hop counts, some hoop counts are not calculated correctly
-	cout << "\nHop count matrix is \n";
+	//There is some bug in calculating hop counts, some hop counts are not calculated correctly
+	cout << "\nHop count matrix is (* bug, output not correct)\n";
 	for (int i = 0; i < obj.n; i++) {
 		for (int j = 0; j < obj.n; j++)
 			cout << obj.hopCountMatrix[i][j] << " ";
