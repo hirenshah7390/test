@@ -132,6 +132,7 @@
     <ResourceCompile Include="CS5592Project.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="CLRSExample.csv" />
     <None Include="CongestedPathInput1.csv" />
     <None Include="CongestedPathInput2.csv" />
   </ItemGroup>

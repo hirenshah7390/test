@@ -19,12 +19,12 @@ InputParser::~InputParser()
 //This function reads the file and saves the data in the matrices of EdgeWeight, FlowMatrix and CapacityMatrix.
 void InputParser::ReadInputFile()
 {
-	ifstream file("C:\\Users\\mom\\Google Drive\\fall 2016 semester\\design and analysis of algorithms\\my work\\my project\\CS5592Project\\CS5592Project\\CongestedPathInput2.csv");
-	obj.edgeWeights = obj.AdjacencyMatrix(6);
-	obj.flowMatrix = obj.AdjacencyMatrix(6);
-	obj.capacityMatrix = obj.AdjacencyMatrix(6);
-	obj.hopCountMatrix = obj.AdjacencyMatrix(6);
-	
+	ifstream file("C:\\Users\\mom\\Google Drive\\fall 2016 semester\\design and analysis of algorithms\\my work\\my project\\CS5592Project\\CS5592Project\\CLRSExample.csv");
+	obj.edgeWeights = obj.AdjacencyMatrix(5);
+	obj.flowMatrix = obj.AdjacencyMatrix(5);
+	obj.capacityMatrix = obj.AdjacencyMatrix(5);
+	obj.hopCountMatrix = obj.AdjacencyMatrix(5);
+	obj.n = 5;
 	if (file.good()) {
 		cout << "file exists";
 		string value;
@@ -110,6 +110,7 @@ void InputParser::ReadInputFile()
 	}
 }
 
+
 int main()
 {
 	InputParser parser;
@@ -137,25 +138,56 @@ int main()
 	//Intialize a matrix with edge weights to apply Floyd-Warshall logic. 
 	//We don't use edgeWeights matrix and overwrite it because we may need it for other approaches.
 	obj.allPairsShortestMatrix = obj.edgeWeights;
+	
+	//One way to track hops and hopcount: create a temporary matrix to keep track of vertices in our path. Refer to CLRS Pg.697 "Predecessor matrix".
+	obj.predecessorMatrix = obj.AdjacencyMatrix(5);
+	//initialize predecessorMatrix
+	for (int i = 0; i < obj.n; i++) {
+		for (int j = 0; j < obj.n; j++) {
+			if ((i == j) || (obj.edgeWeights[i][j] == 9999))
+				obj.predecessorMatrix[i][j] = 8888;
+			else if ((i != j) && (obj.edgeWeights[i][j] < 9999))
+				obj.predecessorMatrix[i][j] = i+1;
+		}
+	}
 
-	//One way to track hops and hopcount: create a temporary matrix to keep track of vertices in our path. Refer to CLRS Pg.697 "Pi matrix".
-	//obj.tempPiMatrix = obj.AdjacencyMatrix(6);
-	//for (int i = 0; i < obj.n; i++) {
-	//	for (int j = 0; j < obj.n; j++) {
-	//		if (i == j)
-	//			obj.tempPiMatrix[i][j] = 9999;
-	//		else
-	//			obj.tempPiMatrix[i][j] = i;
-	//	}
-	//}
+	//Print initial predecessor matrix
+	cout << "\nInitial predecessor matrix is \n";
+	for (int i = 0; i < obj.n; i++) {
+		for (int j = 0; j < obj.n; j++) {
+			cout << obj.predecessorMatrix[i][j] << " ";
+		}
+		cout << endl;
+	}
+	
 
-	for (int k = 0; k < obj.n; k++)
-		for (int i = 0; i < obj.n; i++)
-			for (int j = 0; j < obj.n; j++)
+	for (int k = 0; k < obj.n; k++) {
+		for (int i = 0; i < obj.n; i++) {
+			for (int j = 0; j < obj.n; j++) {
 				if (obj.allPairsShortestMatrix[i][j] > obj.allPairsShortestMatrix[i][k] + obj.allPairsShortestMatrix[k][j]) {
 					obj.allPairsShortestMatrix[i][j] = obj.allPairsShortestMatrix[i][k] + obj.allPairsShortestMatrix[k][j];
-					obj.hopCountMatrix[i][j]+=1;
 				}
+			}
+		}
+
+		//printing each D matrix step
+		cout << "\nD matrix step \n";
+		for (int i = 0; i < obj.n; i++) {
+			for (int j = 0; j < obj.n; j++) {
+				cout << obj.allPairsShortestMatrix[i][j] << " ";
+			}
+			cout << endl;
+		}
+
+		for (int i = 0; i < obj.n; i++) {
+			for (int j = 0; j < obj.n; j++) {
+				if (obj.allPairsShortestMatrix[i][j] > obj.allPairsShortestMatrix[i][k] + obj.allPairsShortestMatrix[k][j]) 
+					obj.predecessorMatrix[i][j] = obj.predecessorMatrix[k][j];
+				else if (obj.allPairsShortestMatrix[i][j] <= obj.allPairsShortestMatrix[i][k] + obj.allPairsShortestMatrix[k][j])
+					obj.predecessorMatrix[i][j] = obj.predecessorMatrix[i][j];
+			}
+		}
+	}
 
 	cout << "\nAll pairs shortest paths for single car without traffic using Floyd-Warshall algorithm is \n";
 	for (int i = 0; i < obj.n; i++) {
@@ -171,6 +203,21 @@ int main()
 			cout << obj.hopCountMatrix[i][j] << " ";
 		cout << endl;
 	}
+
+	//Printing predecessor matrix
+	cout << "\nPredecessor matrix is \n";
+	for (int i = 0; i < obj.n; i++) {
+		for (int j = 0; j < obj.n; j++)
+			cout << obj.predecessorMatrix[i][j] << " ";
+		cout << endl;
+	}
+
+	////Printing shortest path from source i to destination j
+	//int source = 1;
+	//int destination = 5;
+	//cout << "\nShortest path from i to j is \n";
+	//obj.printShortestPath(obj.predecessorMatrix, source-1, destination-1);
+
 	getchar();
 	return 0;
 }

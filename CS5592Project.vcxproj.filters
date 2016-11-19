@@ -49,5 +49,6 @@
       <Filter>Source Files</Filter>
     </None>
     <None Include="CongestedPathInput2.csv" />
+    <None Include="CLRSExample.csv" />
   </ItemGroup>
 </Project>

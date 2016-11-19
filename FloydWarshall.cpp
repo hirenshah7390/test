@@ -31,6 +31,25 @@ vector<vector<int>> FloydWarshall::AdjacencyMatrix(int n)
 	return adj;
 	}
 
+
+//Method to print all pairs shortest paths from source to destination
+int FloydWarshall::printShortestPath(vector<vector<int>> predecessorMatrix, int i, int j)
+{
+	if (i == j) {
+		cout << i;
+		return i;
+	}
+	else if (predecessorMatrix[i][j] == 8888) {
+		cout << 7777;
+		return 7777;
+	}
+	else {
+		printShortestPath(predecessorMatrix, i, predecessorMatrix[i][j]);
+		cout << j;
+		return j;
+	}
+}
+
 FloydWarshall::~FloydWarshall()
 {
 
