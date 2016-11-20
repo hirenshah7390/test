@@ -114,7 +114,6 @@ void InputParser::ReadInputFile()
 
 int main()
 {
-
 	obj.n = 6;
 	InputParser parser;
 	parser.ReadInputFile();
@@ -221,8 +220,7 @@ int main()
 		}
 		cout << endl;
 	}
-
-
+	
 	//Load matrix initialization and definition
 	obj.loadMatrix = obj.AdjacencyMatrix(obj.n);
 	for (int i = 0; i < obj.n; i++)
@@ -245,23 +243,17 @@ int main()
 	//}
 	for (int i = 0; i < obj.n; i++) {
 		for (int j = 0; j < obj.n; j++) {
-			for (int x = 0; x < obj.n; x++) {
-				for (int y = 0; y < obj.n; y++) {
-					for (int k = 0; k < obj.hopCountMatrix[i][j]; k++) {
-						if ((obj.actualPaths[x][y][k] == i) && k != obj.hopCountMatrix[x][y])
-							if (obj.actualPaths[x][y][k + 1] == j)
-								obj.loadMatrix[i][j] += obj.flowMatrix[i][(obj.actualPaths[x][y][obj.hopCountMatrix[x][y]])];
+			for (int k = 0; k < obj.hopCountMatrix[i][j]; k++) {
+				if ((obj.actualPaths[i][j][k] == i) && k != obj.hopCountMatrix[i][j])
+					if (obj.actualPaths[i][j][k + 1] == j)
+							obj.loadMatrix[i][j] += obj.flowMatrix[i][(obj.actualPaths[i][j][obj.hopCountMatrix[i][j]])];
 					}
-				}
-	
-			}
+				
+			
 			cout << obj.loadMatrix[i][j] << " ";
 		}
 		cout << endl;
 	}
-
-
-
 	getchar();
 	return 0;
 }

@@ -5,13 +5,10 @@
 using namespace std;
 class FloydWarshall
 {
-
 public:
 	int n, k, src, dest;
 	 vector<vector<int>> edgeWeights, flowMatrix, capacityMatrix, loadMatrix, delayMatrix, allPairsShortestMatrix, hopCountMatrix, predecessorMatrix;
 	 vector<vector<vector<int>>> actualShortestPathMatrix(int), actualPaths;
-
-
 	 FloydWarshall();
 	~FloydWarshall();
 	vector<vector<int>> AdjacencyMatrix(int);
