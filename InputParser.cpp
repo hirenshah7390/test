@@ -191,13 +191,15 @@ int main()
 	}
 
 	obj.actualPaths = obj.actualShortestPathMatrix(obj.n);
-    //calling actual shortest path function
+    
+	//calling actual shortest path function
 	for (int i = 0; i < obj.n; i++)
 		for (int j = 0; j < obj.n; j++) {
 			int duplicatej = j;
 			obj.actualShortestPath(obj.predecessorMatrix, i, j, duplicatej, obj.actualPaths);
 		}
-		//Printing actual all pairs shortest paths matrix
+	
+	//Printing actual all pairs shortest paths matrix
 	cout << "\nActual all pairs shortest paths matrix is\n";
 	for (int i = 0; i < obj.n; i++) {
 		for (int j = 0; j < obj.n; j++) {
@@ -208,6 +210,58 @@ int main()
 		}
 		cout << endl;
 	}
+
+	//Hopcount matrix initialization and definition
+	obj.hopCountMatrix = obj.AdjacencyMatrix(obj.n);
+	cout << "\nHopcount matrix is \n";
+	for (int i = 0; i < obj.n; i++) {
+		for (int j = 0; j < obj.n; j++) {
+			obj.hopCountMatrix[i][j] = (obj.actualPaths[i][j].size() - 1);
+			cout << obj.hopCountMatrix[i][j] << " ";
+		}
+		cout << endl;
+	}
+
+
+	//Load matrix initialization and definition
+	obj.loadMatrix = obj.AdjacencyMatrix(obj.n);
+	for (int i = 0; i < obj.n; i++)
+		for (int j = 0; j < obj.n; j++) {
+			if (obj.edgeWeights[i][j] == 9999)
+				obj.loadMatrix[i][j] = 9999;
+			else
+				obj.loadMatrix[i][j] = 0;
+	}
+	cout << "\nLoad matrix is \n";
+	//for (int i = 0; i < obj.n; i++) {
+	//	for (int j = 0; j < obj.n; j++) {
+	//		for (int k = 0; k < obj.hopCountMatrix[i][j]; k++) {
+	//			if ((obj.actualPaths[i][j][k] == i) && (obj.actualPaths[i][j][k + 1] == j))
+	//				obj.loadMatrix[i][j] += obj.flowMatrix[i][(obj.actualPaths[i][j][obj.hopCountMatrix[i][j]])];
+	//		}
+	//		cout << obj.loadMatrix[i][j] << " ";
+	//	}
+	//	cout << endl;
+	//}
+	for (int i = 0; i < obj.n; i++) {
+		for (int j = 0; j < obj.n; j++) {
+			for (int x = 0; x < obj.n; x++) {
+				for (int y = 0; y < obj.n; y++) {
+					for (int k = 0; k < obj.hopCountMatrix[i][j]; k++) {
+						if ((obj.actualPaths[x][y][k] == i) && k != obj.hopCountMatrix[x][y])
+							if (obj.actualPaths[x][y][k + 1] == j)
+								obj.loadMatrix[i][j] += obj.flowMatrix[i][(obj.actualPaths[x][y][obj.hopCountMatrix[x][y]])];
+					}
+				}
+	
+			}
+			cout << obj.loadMatrix[i][j] << " ";
+		}
+		cout << endl;
+	}
+
+
+
 	getchar();
 	return 0;
 }
