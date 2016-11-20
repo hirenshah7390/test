@@ -8,6 +8,7 @@
 
 using namespace std;
 FloydWarshall obj;
+
 InputParser::InputParser()
 {
 }
@@ -19,12 +20,12 @@ InputParser::~InputParser()
 //This function reads the file and saves the data in the matrices of EdgeWeight, FlowMatrix and CapacityMatrix.
 void InputParser::ReadInputFile()
 {
-	ifstream file("C:\\Users\\mom\\Google Drive\\fall 2016 semester\\design and analysis of algorithms\\my work\\my project\\CS5592Project\\CS5592Project\\CLRSExample.csv");
-	obj.edgeWeights = obj.AdjacencyMatrix(5);
-	obj.flowMatrix = obj.AdjacencyMatrix(5);
-	obj.capacityMatrix = obj.AdjacencyMatrix(5);
-	obj.hopCountMatrix = obj.AdjacencyMatrix(5);
-	obj.n = 5;
+	obj.n = 6;
+	ifstream file("C:\\Users\\mom\\Google Drive\\fall 2016 semester\\design and analysis of algorithms\\my work\\my project\\CS5592Project\\CS5592Project\\CongestedPathInput1.csv");
+	obj.edgeWeights = obj.AdjacencyMatrix(obj.n);
+	obj.flowMatrix = obj.AdjacencyMatrix(obj.n);
+	obj.capacityMatrix = obj.AdjacencyMatrix(obj.n);
+
 	if (file.good()) {
 		cout << "file exists";
 		string value;
@@ -108,11 +109,13 @@ void InputParser::ReadInputFile()
 	else {
 		cout << "file doesn't exist";
 	}
-}
 
+}
 
 int main()
 {
+
+	obj.n = 6;
 	InputParser parser;
 	parser.ReadInputFile();
 	cout << "\nNumber of vertices are N = ";
@@ -126,28 +129,20 @@ int main()
 		cout << endl;
 	}
 
-	//Initialize hop count matrix
-	for (int i = 0; i < obj.n; i++)
-		for (int j = 0; j<obj.n; j++)
-			obj.hopCountMatrix[i][j] = 1;
-	for (int i = 0; i < obj.n; i++)
-		obj.hopCountMatrix[i][i] = 0;
-
-	
-
 	//Intialize a matrix with edge weights to apply Floyd-Warshall logic. 
 	//We don't use edgeWeights matrix and overwrite it because we may need it for other approaches.
 	obj.allPairsShortestMatrix = obj.edgeWeights;
 	
 	//One way to track hops and hopcount: create a temporary matrix to keep track of vertices in our path. Refer to CLRS Pg.697 "Predecessor matrix".
-	obj.predecessorMatrix = obj.AdjacencyMatrix(5);
-	//initialize predecessorMatrix
+	obj.predecessorMatrix = obj.AdjacencyMatrix(obj.n);
+
+	//Initialize predecessorMatrix
 	for (int i = 0; i < obj.n; i++) {
 		for (int j = 0; j < obj.n; j++) {
 			if ((i == j) || (obj.edgeWeights[i][j] == 9999))
 				obj.predecessorMatrix[i][j] = 8888;
 			else if ((i != j) && (obj.edgeWeights[i][j] < 9999))
-				obj.predecessorMatrix[i][j] = i+1;
+				obj.predecessorMatrix[i][j] = i;
 		}
 	}
 
@@ -160,31 +155,22 @@ int main()
 		cout << endl;
 	}
 	
-
 	for (int k = 0; k < obj.n; k++) {
+		//Predecessor matrix logic
+		for (int i = 0; i < obj.n; i++) {
+			for (int j = 0; j < obj.n; j++) {
+				if (obj.allPairsShortestMatrix[i][j] > obj.allPairsShortestMatrix[i][k] + obj.allPairsShortestMatrix[k][j])
+					obj.predecessorMatrix[i][j] = obj.predecessorMatrix[k][j];
+				else if (obj.allPairsShortestMatrix[i][j] <= obj.allPairsShortestMatrix[i][k] + obj.allPairsShortestMatrix[k][j])
+					obj.predecessorMatrix[i][j] = obj.predecessorMatrix[i][j];
+			}
+		}
+		//Floyd-Warshall logic
 		for (int i = 0; i < obj.n; i++) {
 			for (int j = 0; j < obj.n; j++) {
 				if (obj.allPairsShortestMatrix[i][j] > obj.allPairsShortestMatrix[i][k] + obj.allPairsShortestMatrix[k][j]) {
 					obj.allPairsShortestMatrix[i][j] = obj.allPairsShortestMatrix[i][k] + obj.allPairsShortestMatrix[k][j];
 				}
-			}
-		}
-
-		//printing each D matrix step
-		cout << "\nD matrix step \n";
-		for (int i = 0; i < obj.n; i++) {
-			for (int j = 0; j < obj.n; j++) {
-				cout << obj.allPairsShortestMatrix[i][j] << " ";
-			}
-			cout << endl;
-		}
-
-		for (int i = 0; i < obj.n; i++) {
-			for (int j = 0; j < obj.n; j++) {
-				if (obj.allPairsShortestMatrix[i][j] > obj.allPairsShortestMatrix[i][k] + obj.allPairsShortestMatrix[k][j]) 
-					obj.predecessorMatrix[i][j] = obj.predecessorMatrix[k][j];
-				else if (obj.allPairsShortestMatrix[i][j] <= obj.allPairsShortestMatrix[i][k] + obj.allPairsShortestMatrix[k][j])
-					obj.predecessorMatrix[i][j] = obj.predecessorMatrix[i][j];
 			}
 		}
 	}
@@ -196,14 +182,6 @@ int main()
 			cout << endl;
 	}
 
-	//There is some bug in calculating hop counts, some hop counts are not calculated correctly
-	cout << "\nHop count matrix is (* bug, output not correct)\n";
-	for (int i = 0; i < obj.n; i++) {
-		for (int j = 0; j < obj.n; j++)
-			cout << obj.hopCountMatrix[i][j] << " ";
-		cout << endl;
-	}
-
 	//Printing predecessor matrix
 	cout << "\nPredecessor matrix is \n";
 	for (int i = 0; i < obj.n; i++) {
@@ -212,12 +190,25 @@ int main()
 		cout << endl;
 	}
 
-	////Printing shortest path from source i to destination j
-	//int source = 1;
-	//int destination = 5;
-	//cout << "\nShortest path from i to j is \n";
-	//obj.printShortestPath(obj.predecessorMatrix, source-1, destination-1);
-
+	obj.actualPaths = obj.actualShortestPathMatrix(obj.n);
+    //calling actual shortest path function
+	for (int i = 0; i < obj.n; i++)
+		for (int j = 0; j < obj.n; j++) {
+			int duplicatej = j;
+			obj.actualShortestPath(obj.predecessorMatrix, i, j, duplicatej, obj.actualPaths);
+		}
+		//Printing actual all pairs shortest paths matrix
+	cout << "\nActual all pairs shortest paths matrix is\n";
+	for (int i = 0; i < obj.n; i++) {
+		for (int j = 0; j < obj.n; j++) {
+			for (int k = 0; k < obj.actualPaths[i][j].size(); k++) {
+				cout << obj.actualPaths[i][j][k] + 1;
+			}
+			cout << " ";
+		}
+		cout << endl;
+	}
 	getchar();
 	return 0;
 }
+
