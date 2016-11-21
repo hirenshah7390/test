@@ -5,6 +5,7 @@
 #include <sstream>
 #include <stdio.h>
 #include <conio.h>
+#include <iterator>
 
 using namespace std;
 FloydWarshall obj;
@@ -191,11 +192,21 @@ int main()
 
 	obj.actualPaths = obj.actualShortestPathMatrix(obj.n);
     
+	//Load matrix initialization and definition
+	obj.loadMatrix = obj.AdjacencyMatrix(obj.n);
+	for (int i = 0; i < obj.n; i++)
+		for (int j = 0; j < obj.n; j++) {
+			if (obj.edgeWeights[i][j] == 9999)
+				obj.loadMatrix[i][j] = 9999;
+			else
+				obj.loadMatrix[i][j] = 0;
+		}
+
 	//calling actual shortest path function
 	for (int i = 0; i < obj.n; i++)
 		for (int j = 0; j < obj.n; j++) {
 			int duplicatej = j;
-			obj.actualShortestPath(obj.predecessorMatrix, i, j, duplicatej, obj.actualPaths);
+			obj.actualShortestPath(obj.predecessorMatrix, i, j, duplicatej, obj.actualPaths, obj.loadMatrix);
 		}
 	
 	//Printing actual all pairs shortest paths matrix
@@ -210,7 +221,7 @@ int main()
 		cout << endl;
 	}
 
-	//Hopcount matrix initialization and definition
+	//Hopcount matrix initialization, definition and printing
 	obj.hopCountMatrix = obj.AdjacencyMatrix(obj.n);
 	cout << "\nHopcount matrix is \n";
 	for (int i = 0; i < obj.n; i++) {
@@ -220,17 +231,9 @@ int main()
 		}
 		cout << endl;
 	}
-	
-	//Load matrix initialization and definition
-	obj.loadMatrix = obj.AdjacencyMatrix(obj.n);
-	for (int i = 0; i < obj.n; i++)
-		for (int j = 0; j < obj.n; j++) {
-			if (obj.edgeWeights[i][j] == 9999)
-				obj.loadMatrix[i][j] = 9999;
-			else
-				obj.loadMatrix[i][j] = 0;
-	}
-	cout << "\nLoad matrix is \n";
+
+
+
 	//for (int i = 0; i < obj.n; i++) {
 	//	for (int j = 0; j < obj.n; j++) {
 	//		for (int k = 0; k < obj.hopCountMatrix[i][j]; k++) {
@@ -241,19 +244,42 @@ int main()
 	//	}
 	//	cout << endl;
 	//}
-	for (int i = 0; i < obj.n; i++) {
+	/*for (int i = 0; i < obj.n; i++) {
 		for (int j = 0; j < obj.n; j++) {
 			for (int k = 0; k < obj.hopCountMatrix[i][j]; k++) {
 				if ((obj.actualPaths[i][j][k] == i) && k != obj.hopCountMatrix[i][j])
 					if (obj.actualPaths[i][j][k + 1] == j)
 							obj.loadMatrix[i][j] += obj.flowMatrix[i][(obj.actualPaths[i][j][obj.hopCountMatrix[i][j]])];
 					}
-				
-			
 			cout << obj.loadMatrix[i][j] << " ";
 		}
 		cout << endl;
+	}*/
+	
+	//Printing load matrix
+	cout << "\nLoad matrix is \n";
+	for (int i = 0; i < obj.n; i++) {
+		for (int j = 0; j < obj.n; j++)
+			cout << obj.loadMatrix[i][j] << " ";
+		cout << endl;
 	}
+
+	//converting actual path matrix into string matrix
+	/*obj.actualPathsStringMatrix = obj.actualPathsString(obj.n);
+	obj.sLoadMatrix = obj.AdjacencyMatrix(obj.n);
+	cout << "\String actual path matrix is \n";
+	for (int i = 0; i < obj.n; i++) {
+		for (int j = 0; j < obj.n; j++) {
+			std::stringstream result;
+			std::copy(obj.actualPaths[i][j].begin(), obj.actualPaths[i][j].end(), std::ostream_iterator<int>(result, ","));
+			obj.actualPathsStringMatrix[i][j] = result.str();
+			if (result.str().find(to_string(i) + "," + to_string(j)))
+				obj.sLoadMatrix[i][j] += obj.flowMatrix[i][(obj.actualPaths[i][j][obj.hopCountMatrix[i][j]])];
+			cout << obj.actualPathsStringMatrix[i][j] << " ";
+		}
+		cout << endl;
+	}*/
+
 	getchar();
 	return 0;
 }
