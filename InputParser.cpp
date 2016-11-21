@@ -22,6 +22,7 @@ InputParser::~InputParser()
 void InputParser::ReadInputFile()
 {
 	obj.n = 6;
+	//"D:\\Projects\\DAA project\\CS5592Project\\CongestedPathInput1.csv"
 	ifstream file("C:\\Users\\mom\\Google Drive\\fall 2016 semester\\design and analysis of algorithms\\my work\\my project\\CS5592Project\\CS5592Project\\CongestedPathInput1.csv");
 	obj.edgeWeights = obj.AdjacencyMatrix(obj.n);
 	obj.flowMatrix = obj.AdjacencyMatrix(obj.n);
