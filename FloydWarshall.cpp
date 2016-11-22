@@ -10,6 +10,11 @@ vector<vector<string>> FloydWarshall::actualPathsString(int n)
 	vector<vector<string>> saspm(n, vector<string>(n, ""));
 	return saspm;
 }
+vector<vector<float>> FloydWarshall::floatMatrices(int n)
+{
+	vector<vector<float>> floatMatrix(n, vector<float>(n, 0.0));
+	return floatMatrix;
+}
 vector<vector<vector<int>>> FloydWarshall::actualShortestPathMatrix(int n)
 {
 	vector<vector<vector<int>>> aspm(n, vector<vector<int>>(n, vector<int>(0,1)));
@@ -37,24 +42,24 @@ int FloydWarshall::actualShortestPath(vector<vector<int>> predecessorMatrix, int
 		return i;	
 	}
 	else if (predecessorMatrix[i][j] == 8888) {
-		for (int i = 0; i < n; i++) {
+		//for (int i = 0; i < n; i++) {
 			if (actualPathsCal[i][duplicatej].size() == 2)
 			{
 				loadMatrix[i][j] += flowMatrix[i][duplicatej];
 			}
-		}
+		//}
 		return 7777;
 	}
 	else {
 		actualShortestPath(predecessorMatrix, i, predecessorMatrix[i][j], duplicatej, actualPathsCal, loadMatrix);
 		actualPathsCal[i][duplicatej].push_back(j);
-		for (int i = 0; i < n; i++) {
+		//for (int i = 0; i < n; i++) {
 
 			if (actualPathsCal[i][duplicatej].size() == 2)
 			{
 				loadMatrix[i][j] += flowMatrix[i][duplicatej];
 			}
-		}
+		//}
 		return j;
 	}
 

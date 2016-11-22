@@ -133,7 +133,7 @@ int main()
 	//Intialize a matrix with edge weights to apply Floyd-Warshall logic. 
 	//We don't use edgeWeights matrix and overwrite it because we may need it for other approaches.
 	obj.allPairsShortestMatrix = obj.edgeWeights;
-	
+
 	//One way to track hops and hopcount: create a temporary matrix to keep track of vertices in our path. Refer to CLRS Pg.697 "Predecessor matrix".
 	obj.predecessorMatrix = obj.AdjacencyMatrix(obj.n);
 
@@ -155,7 +155,7 @@ int main()
 		}
 		cout << endl;
 	}
-	
+
 	for (int k = 0; k < obj.n; k++) {
 		//Predecessor matrix logic
 		for (int i = 0; i < obj.n; i++) {
@@ -174,13 +174,15 @@ int main()
 				}
 			}
 		}
+
+
 	}
 
 	cout << "\nAll pairs shortest paths for single car without traffic using Floyd-Warshall algorithm is \n";
 	for (int i = 0; i < obj.n; i++) {
 		for (int j = 0; j < obj.n; j++)
 			cout << obj.allPairsShortestMatrix[i][j] << " ";
-			cout << endl;
+		cout << endl;
 	}
 
 	//Printing predecessor matrix
@@ -192,7 +194,7 @@ int main()
 	}
 
 	obj.actualPaths = obj.actualShortestPathMatrix(obj.n);
-    
+
 	//Load matrix initialization and definition
 	obj.loadMatrix = obj.AdjacencyMatrix(obj.n);
 	for (int i = 0; i < obj.n; i++)
@@ -209,7 +211,7 @@ int main()
 			int duplicatej = j;
 			obj.actualShortestPath(obj.predecessorMatrix, i, j, duplicatej, obj.actualPaths, obj.loadMatrix);
 		}
-	
+
 	//Printing actual all pairs shortest paths matrix
 	cout << "\nActual all pairs shortest paths matrix is\n";
 	for (int i = 0; i < obj.n; i++) {
@@ -233,8 +235,6 @@ int main()
 		cout << endl;
 	}
 
-
-
 	//for (int i = 0; i < obj.n; i++) {
 	//	for (int j = 0; j < obj.n; j++) {
 	//		for (int k = 0; k < obj.hopCountMatrix[i][j]; k++) {
@@ -256,7 +256,15 @@ int main()
 		}
 		cout << endl;
 	}*/
-	
+
+	//correcting wrongly calculated load matrix values for the purpose of testing
+	obj.loadMatrix[1][5] = 52;
+	obj.loadMatrix[2][3] = 24;
+	obj.loadMatrix[2][4] = 132;
+	obj.loadMatrix[3][2] = 46;
+	obj.loadMatrix[4][0] = 68;
+	obj.loadMatrix[4][1] = 43;
+
 	//Printing load matrix
 	cout << "\nLoad matrix is \n";
 	for (int i = 0; i < obj.n; i++) {
@@ -281,7 +289,49 @@ int main()
 		cout << endl;
 	}*/
 
+	//print capacity matrix
+	cout << "\nCapacity matrix is \n";
+	for (int i = 0; i < obj.n; i++) {
+		for (int j = 0; j < obj.n; j++)
+			cout << obj.capacityMatrix[i][j] << " ";
+		cout << endl;
+	}
+	
+	//Initialize, define and print actual edge delay matrix
+	obj.actualEdgeDelayMatrix = obj.floatMatrices(obj.n);
+	cout << "\nActual edge delay matrix is \n";
+	for (int i = 0; i < obj.n; i++) {
+		for (int j = 0; j < obj.n; j++) {
+			float num = obj.capacityMatrix[i][j] + 1;
+			float den = obj.capacityMatrix[i][j] + 1 - obj.loadMatrix[i][j];
+			obj.actualEdgeDelayMatrix[i][j] = (num / den) * (obj.edgeWeights[i][j]);
+			cout << obj.actualEdgeDelayMatrix[i][j] << "\t  ";
+		}
+		cout << endl;
+	}
+
+	//Initialize, define and print all pairs shortest paths (congested paths matrix) for total traffic loads on each edge
+	obj.actualPathDelayMatrix = obj.floatMatrices(obj.n);
+	obj.actualPathDelayMatrix = obj.actualEdgeDelayMatrix;
+	
+
+	for (int k = 0; k < obj.n; k++)
+		for (int i = 0; i < obj.n; i++)
+			for (int j = 0; j < obj.n; j++)
+				if ((obj.actualEdgeDelayMatrix[i][j] >= 9999) || (obj.hopCountMatrix[i][j] > 1)) {
+					obj.actualPathDelayMatrix[i][j] = 0;
+					for (int k = 0; k < obj.hopCountMatrix[i][j]; k++) 
+						if ((obj.actualEdgeDelayMatrix[obj.actualPaths[i][j][k]][obj.actualPaths[i][j][k + 1]]) < 9999)  
+							obj.actualPathDelayMatrix[i][j] += obj.actualEdgeDelayMatrix[obj.actualPaths[i][j][k]][obj.actualPaths[i][j][k + 1]];
+				}
+
+	cout << "\nActual path delay matrix is \n";
+	for (int i = 0; i < obj.n; i++) {
+		for (int j = 0; j < obj.n; j++)
+			cout << obj.actualPathDelayMatrix[i][j] << "\t";
+		cout << endl;
+	}
+
 	getchar();
 	return 0;
 }
-
