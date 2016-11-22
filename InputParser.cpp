@@ -23,7 +23,7 @@ void InputParser::ReadInputFile()
 {
 	obj.n = 6;
 	//"D:\\Projects\\DAA project\\CS5592Project\\CongestedPathInput1.csv"
-	ifstream file("C:\\Users\\mom\\Google Drive\\fall 2016 semester\\design and analysis of algorithms\\my work\\my project\\CS5592Project\\CS5592Project\\CongestedPathInput1.csv");
+	ifstream file("D:\\Projects\\DAA project\\CS5592Project\\CongestedPathInput1.csv");
 	obj.edgeWeights = obj.AdjacencyMatrix(obj.n);
 	obj.flowMatrix = obj.AdjacencyMatrix(obj.n);
 	obj.capacityMatrix = obj.AdjacencyMatrix(obj.n);
@@ -196,20 +196,36 @@ int main()
 	obj.actualPaths = obj.actualShortestPathMatrix(obj.n);
 
 	//Load matrix initialization and definition
-	obj.loadMatrix = obj.AdjacencyMatrix(obj.n);
+	obj.loadMatrix = obj.flowMatrix;
 	for (int i = 0; i < obj.n; i++)
 		for (int j = 0; j < obj.n; j++) {
 			if (obj.edgeWeights[i][j] == 9999)
 				obj.loadMatrix[i][j] = 9999;
 			else
-				obj.loadMatrix[i][j] = 0;
+				obj.loadMatrix[i][i] = 0;
 		}
 
+	
 	//calling actual shortest path function
 	for (int i = 0; i < obj.n; i++)
 		for (int j = 0; j < obj.n; j++) {
 			int duplicatej = j;
 			obj.actualShortestPath(obj.predecessorMatrix, i, j, duplicatej, obj.actualPaths, obj.loadMatrix);
+			if (obj.actualPaths[i][j].size() > 2)
+			{
+				//This code helps in building the load matrix for the common edges in the shortest paths. Dynamic programming.
+				for (int k = 0; k < obj.actualPaths[i][j].size() - 1; k++)
+				{
+					int src = obj.actualPaths[i][j][k];
+					int dest = obj.actualPaths[i][j][k+1];
+					obj.loadMatrix[src][dest] += obj.flowMatrix[i][j];
+					if (obj.allPairsShortestMatrix[i][j] < obj.edgeWeights[i][j] && obj.edgeWeights[i][j] != 9999)
+					{
+						obj.loadMatrix[i][j] = 0;
+					}
+				
+				}
+			}
 		}
 
 	//Printing actual all pairs shortest paths matrix
@@ -235,36 +251,6 @@ int main()
 		cout << endl;
 	}
 
-	//for (int i = 0; i < obj.n; i++) {
-	//	for (int j = 0; j < obj.n; j++) {
-	//		for (int k = 0; k < obj.hopCountMatrix[i][j]; k++) {
-	//			if ((obj.actualPaths[i][j][k] == i) && (obj.actualPaths[i][j][k + 1] == j))
-	//				obj.loadMatrix[i][j] += obj.flowMatrix[i][(obj.actualPaths[i][j][obj.hopCountMatrix[i][j]])];
-	//		}
-	//		cout << obj.loadMatrix[i][j] << " ";
-	//	}
-	//	cout << endl;
-	//}
-	/*for (int i = 0; i < obj.n; i++) {
-		for (int j = 0; j < obj.n; j++) {
-			for (int k = 0; k < obj.hopCountMatrix[i][j]; k++) {
-				if ((obj.actualPaths[i][j][k] == i) && k != obj.hopCountMatrix[i][j])
-					if (obj.actualPaths[i][j][k + 1] == j)
-							obj.loadMatrix[i][j] += obj.flowMatrix[i][(obj.actualPaths[i][j][obj.hopCountMatrix[i][j]])];
-					}
-			cout << obj.loadMatrix[i][j] << " ";
-		}
-		cout << endl;
-	}*/
-
-	//correcting wrongly calculated load matrix values for the purpose of testing
-	obj.loadMatrix[1][5] = 52;
-	obj.loadMatrix[2][3] = 24;
-	obj.loadMatrix[2][4] = 132;
-	obj.loadMatrix[3][2] = 46;
-	obj.loadMatrix[4][0] = 68;
-	obj.loadMatrix[4][1] = 43;
-
 	//Printing load matrix
 	cout << "\nLoad matrix is \n";
 	for (int i = 0; i < obj.n; i++) {
@@ -272,22 +258,6 @@ int main()
 			cout << obj.loadMatrix[i][j] << " ";
 		cout << endl;
 	}
-
-	//converting actual path matrix into string matrix
-	/*obj.actualPathsStringMatrix = obj.actualPathsString(obj.n);
-	obj.sLoadMatrix = obj.AdjacencyMatrix(obj.n);
-	cout << "\String actual path matrix is \n";
-	for (int i = 0; i < obj.n; i++) {
-		for (int j = 0; j < obj.n; j++) {
-			std::stringstream result;
-			std::copy(obj.actualPaths[i][j].begin(), obj.actualPaths[i][j].end(), std::ostream_iterator<int>(result, ","));
-			obj.actualPathsStringMatrix[i][j] = result.str();
-			if (result.str().find(to_string(i) + "," + to_string(j)))
-				obj.sLoadMatrix[i][j] += obj.flowMatrix[i][(obj.actualPaths[i][j][obj.hopCountMatrix[i][j]])];
-			cout << obj.actualPathsStringMatrix[i][j] << " ";
-		}
-		cout << endl;
-	}*/
 
 	//print capacity matrix
 	cout << "\nCapacity matrix is \n";

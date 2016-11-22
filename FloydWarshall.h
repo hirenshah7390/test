@@ -7,12 +7,8 @@ class FloydWarshall
 {
 public:
 	int n, k, src, dest;
-	 vector<vector<int>> edgeWeights, flowMatrix, capacityMatrix, loadMatrix, delayMatrix, allPairsShortestMatrix, hopCountMatrix, predecessorMatrix;
-
-	 vector<vector<string>> actualPathsString(int n), actualPathsStringMatrix, sLoadMatrix;
-
+	 vector<vector<int>> edgeWeights, flowMatrix, capacityMatrix, loadMatrix, allPairsShortestMatrix, hopCountMatrix, predecessorMatrix;
 	 vector<vector<float>> floatMatrices(int n), actualEdgeDelayMatrix, actualPathDelayMatrix;
-
 	 vector<vector<vector<int>>> actualShortestPathMatrix(int), actualPaths;
 	 FloydWarshall();
 	~FloydWarshall();
