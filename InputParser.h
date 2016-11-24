@@ -9,6 +9,6 @@ public:
 	InputParser();
 	~InputParser();
 	void ReadInputFile();
-	vector<vector<float>> recE(vector<vector<float>>);
+	vector<vector<float>> recomputeEdges(vector<vector<float>>,vector<vector<int>>);
 };
 
