@@ -133,6 +133,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="CLRSExample.csv" />
+    <None Include="CongestedPathInput1 with modified capacity.csv" />
     <None Include="CongestedPathInput1.csv" />
     <None Include="CongestedPathInput2.csv" />
   </ItemGroup>

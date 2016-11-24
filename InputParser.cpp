@@ -7,6 +7,14 @@
 #include <conio.h>
 #include <iterator>
 
+/*
+shorhand codes:
+9999 - na (no edge)
+8888 - NIL (predecessor matrix)
+7777 - NA (no direct route)
+6666 - infinity (gridlock)
+*/
+
 using namespace std;
 FloydWarshall obj;
 
@@ -24,7 +32,7 @@ void InputParser::ReadInputFile()
 	obj.n = 6;
 	//D:\\Projects\\DAA project\\CS5592Project\\CongestedPathInput1.csv
 	//C:\\Users\\mom\\Google Drive\\fall 2016 semester\\design and analysis of algorithms\\my work\\my project\\CS5592Project\\CS5592Project\\CongestedPathInput1.csv
-	ifstream file("C:\\Users\\mom\\Google Drive\\fall 2016 semester\\design and analysis of algorithms\\my work\\my project\\CS5592Project\\CS5592Project\\CongestedPathInput1.csv");
+	ifstream file("C:\\Users\\mom\\Google Drive\\fall 2016 semester\\design and analysis of algorithms\\my work\\my project\\CS5592Project\\CS5592Project\\CongestedPathInput1 with modified capacity.csv");
 
 	obj.edgeWeights = obj.floatMatrices(obj.n);
 
@@ -383,7 +391,7 @@ int main()
 				obj.loadMatrix[i][i] = 0;
 		}
 
-	
+
 	//calling actual shortest path function
 	for (int i = 0; i < obj.n; i++)
 		for (int j = 0; j < obj.n; j++) {
@@ -395,13 +403,13 @@ int main()
 				for (int k = 0; k < obj.actualPaths[i][j].size() - 1; k++)
 				{
 					int src = obj.actualPaths[i][j][k];
-					int dest = obj.actualPaths[i][j][k+1];
+					int dest = obj.actualPaths[i][j][k + 1];
 					obj.loadMatrix[src][dest] += obj.flowMatrix[i][j];
 					if (obj.allPairsShortestMatrix[i][j] < obj.edgeWeights[i][j] && obj.edgeWeights[i][j] != 9999)
 					{
 						obj.loadMatrix[i][j] = 0;
 					}
-				
+
 				}
 			}
 		}
@@ -444,7 +452,7 @@ int main()
 			cout << obj.capacityMatrix[i][j] << " ";
 		cout << endl;
 	}
-	
+
 	//Initialize, define and print actual edge delay matrix
 	obj.actualEdgeDelayMatrix = obj.floatMatrices(obj.n);
 	cout << "\nActual edge delay matrix is \n";
@@ -453,56 +461,64 @@ int main()
 			float num = obj.capacityMatrix[i][j] + 1;
 			float den = obj.capacityMatrix[i][j] + 1 - obj.loadMatrix[i][j];
 			obj.actualEdgeDelayMatrix[i][j] = (num / den) * (obj.edgeWeights[i][j]);
+			if (obj.actualEdgeDelayMatrix[i][j] < 0)
+				obj.actualEdgeDelayMatrix[i][j] = 6666;
+			if (obj.actualEdgeDelayMatrix[i][j] >= 9999)
+				obj.actualEdgeDelayMatrix[i][j] = 9999;
 			cout << obj.actualEdgeDelayMatrix[i][j] << "\t  ";
 		}
-		cout << endl;
-	}
+			cout << endl;
+		}
 
-	//Initialize, define and print all pairs shortest paths (congested paths matrix) for total traffic loads on each edge
-	obj.actualPathDelayMatrix = obj.floatMatrices(obj.n);
-	obj.actualPathDelayMatrix = obj.actualEdgeDelayMatrix;
+		//Initialize, define and print all pairs shortest paths (congested paths matrix) for total traffic loads on each edge
+		obj.actualPathDelayMatrix = obj.floatMatrices(obj.n);
+		obj.actualPathDelayMatrix = obj.actualEdgeDelayMatrix;
 
-	for (int k = 0; k < obj.n; k++)
-		for (int i = 0; i < obj.n; i++)
+		for (int k = 0; k < obj.n; k++)
+			for (int i = 0; i < obj.n; i++)
+				for (int j = 0; j < obj.n; j++)
+					if ((obj.actualEdgeDelayMatrix[i][j] >= 9999) || (obj.hopCountMatrix[i][j] > 1)) {
+						obj.actualPathDelayMatrix[i][j] = 0;
+						for (int k = 0; k < obj.hopCountMatrix[i][j]; k++) {
+							if ((obj.actualEdgeDelayMatrix[obj.actualPaths[i][j][k]][obj.actualPaths[i][j][k + 1]]) < 9999)
+								obj.actualPathDelayMatrix[i][j] += obj.actualEdgeDelayMatrix[obj.actualPaths[i][j][k]][obj.actualPaths[i][j][k + 1]];
+							if (obj.actualPathDelayMatrix[i][j] > 6666)
+								obj.actualPathDelayMatrix[i][j] = 6666;
+
+						}
+					}
+
+		cout << "\nActual path delay matrix is \n";
+		for (int i = 0; i < obj.n; i++) {
 			for (int j = 0; j < obj.n; j++)
-				if ((obj.actualEdgeDelayMatrix[i][j] >= 9999) || (obj.hopCountMatrix[i][j] > 1)) {
-					obj.actualPathDelayMatrix[i][j] = 0;
-					for (int k = 0; k < obj.hopCountMatrix[i][j]; k++) 
-						if ((obj.actualEdgeDelayMatrix[obj.actualPaths[i][j][k]][obj.actualPaths[i][j][k + 1]]) < 9999)  
-							obj.actualPathDelayMatrix[i][j] += obj.actualEdgeDelayMatrix[obj.actualPaths[i][j][k]][obj.actualPaths[i][j][k + 1]];
-				}
+				cout << obj.actualPathDelayMatrix[i][j] << "\t";
+			cout << endl;
+		}
 
-	cout << "\nActual path delay matrix is \n";
-	for (int i = 0; i < obj.n; i++) {
-		for (int j = 0; j < obj.n; j++)
-			cout << obj.actualPathDelayMatrix[i][j] << "\t";
-		cout << endl;
+		//calling function for recomputing edges
+		//allocate one s-t pair at one time
+		//initialize a temporary matrix for incrementing flow one s-t pair at one time
+		//obj.tempFlowMatrix = obj.AdjacencyMatrix(obj.n);
+		////initialize a matrix for storing recomputing edge weights
+		//obj.recomputedEdgeDelay = obj.edgeWeights;
+		//for (int i = 0; i < obj.n; i++)
+		//	for (int j = 0; j < obj.n; j++) {
+		//		obj.tempFlowMatrix[i][j] = 0;
+		//	}
+		//
+		//
+		//for (int i = 0; i < obj.n; i++) 
+		//	for (int j = 0; j < obj.n; j++) {
+		//		obj.tempFlowMatrix[i][j] = obj.flowMatrix[i][j];
+		//		obj.recomputedEdgeDelay = parser.recomputeEdges(obj.recomputedEdgeDelay, obj.tempFlowMatrix);
+		//		cout << "\nRecomputed edge delay is\n";
+		//		for (int k = 0; k < obj.n; k++) {
+		//			for (int l = 0; l < obj.n; l++)
+		//				cout << obj.recomputedEdgeDelay[k][l] << "\t";
+		//			cout << endl;
+		//		}
+		//	}
+
+		getchar();
+		return 0;
 	}
-
-	//calling function for recomputing edges
-	//allocate one s-t pair at one time
-	//initialize a temporary matrix for incrementing flow one s-t pair at one time
-	//obj.tempFlowMatrix = obj.AdjacencyMatrix(obj.n);
-	////initialize a matrix for storing recomputing edge weights
-	//obj.recomputedEdgeDelay = obj.edgeWeights;
-	//for (int i = 0; i < obj.n; i++)
-	//	for (int j = 0; j < obj.n; j++) {
-	//		obj.tempFlowMatrix[i][j] = 0;
-	//	}
-	//
-	//
-	//for (int i = 0; i < obj.n; i++) 
-	//	for (int j = 0; j < obj.n; j++) {
-	//		obj.tempFlowMatrix[i][j] = obj.flowMatrix[i][j];
-	//		obj.recomputedEdgeDelay = parser.recomputeEdges(obj.recomputedEdgeDelay, obj.tempFlowMatrix);
-	//		cout << "\nRecomputed edge delay is\n";
-	//		for (int k = 0; k < obj.n; k++) {
-	//			for (int l = 0; l < obj.n; l++)
-	//				cout << obj.recomputedEdgeDelay[k][l] << "\t";
-	//			cout << endl;
-	//		}
-	//	}
-
-	getchar();
-	return 0;
-}
