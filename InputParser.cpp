@@ -8,7 +8,7 @@
 #include <iterator>
 
 /*
-shorhand codes:
+shorthand codes:
 9999 - na (no edge)
 8888 - NIL (predecessor matrix)
 7777 - NA (no direct route)
@@ -314,6 +314,7 @@ int main()
 	obj.n = 6;
 	InputParser parser;
 	parser.ReadInputFile();
+	cout << "\nShorthand codes are as follows:\n" << "9999 : na (no edge)\n" << "8888 : NIL\n" << "7777 : NA (no direct route)\n" << "6666 : Infinity (gridlock)\n";
 	cout << "\nNumber of vertices are N = ";
 	cout << obj.n;
 	cout << "\n";
