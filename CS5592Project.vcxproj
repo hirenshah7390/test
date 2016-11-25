@@ -136,10 +136,10 @@
     <None Include="CongestedPathInput1 with modified capacity.csv" />
     <None Include="CongestedPathInput1.csv" />
     <None Include="CongestedPathInput2.csv" />
-    <None Include="Inputs\CongestedPathInput1.csv" />
-    <None Include="Inputs\CongestedPathInput2.csv" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="Inputs\CongestedPathInput1.txt" />
+    <Text Include="Inputs\CongestedPathInput2.txt" />
     <Text Include="Inputs\CS5592FS16CongestedPathN10bs.txt" />
     <Text Include="Inputs\CS5592FS16CongestedPathN10cs.txt" />
     <Text Include="Inputs\CS5592FS16CongestedPathN10ds.txt" />
