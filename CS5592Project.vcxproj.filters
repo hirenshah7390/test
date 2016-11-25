@@ -50,7 +50,5 @@
     </None>
     <None Include="CongestedPathInput2.csv" />
     <None Include="CLRSExample.csv" />
-    <None Include="Inputs\CongestedPathInput1.csv" />
-    <None Include="Inputs\CongestedPathInput2.csv" />
   </ItemGroup>
 </Project>
