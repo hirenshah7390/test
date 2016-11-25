@@ -50,5 +50,29 @@
     </None>
     <None Include="CongestedPathInput2.csv" />
     <None Include="CLRSExample.csv" />
+    <None Include="Inputs\CongestedPathInput1.csv" />
+    <None Include="Inputs\CongestedPathInput2.csv" />
+    <None Include="CongestedPathInput1 with modified capacity.csv" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Inputs\CS5592FS16CongestedPathN10bs.txt" />
+    <Text Include="Inputs\CS5592FS16CongestedPathN10cs.txt" />
+    <Text Include="Inputs\CS5592FS16CongestedPathN10ds.txt" />
+    <Text Include="Inputs\CS5592FS16CongestedPathN10tb.txt" />
+    <Text Include="Inputs\CS5592FS16CongestedPathN10ts.txt" />
+    <Text Include="Inputs\CS5592FS16CongestedPathN15as.txt" />
+    <Text Include="Inputs\CS5592FS16CongestedPathN15bs.txt" />
+    <Text Include="Inputs\CS5592FS16CongestedPathN20as.txt" />
+    <Text Include="Inputs\CS5592FS16CongestedPathN20bs.txt" />
+    <Text Include="Inputs\CS5592FS16CongestedPathN25ab.txt" />
+    <Text Include="Inputs\CS5592FS16CongestedPathN25as.txt" />
+    <Text Include="Inputs\CS5592FS16CongestedPathN30ab.txt" />
+    <Text Include="Inputs\CS5592FS16CongestedPathN30as.txt" />
+    <Text Include="Inputs\CS5592FS16CongestedPathN35ab.txt" />
+    <Text Include="Inputs\CS5592FS16CongestedPathN35as.txt" />
+    <Text Include="Inputs\CS5592FS16CongestedPathN50ab.txt" />
+    <Text Include="Inputs\CS5592FS16CongestedPathN50as.txt" />
+    <Text Include="Inputs\CS5592FS16CongestedPathN75ab.txt" />
+    <Text Include="Inputs\CS5592FS16CongestedPathN75as.txt" />
   </ItemGroup>
 </Project>

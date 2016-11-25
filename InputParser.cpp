@@ -9,7 +9,12 @@
 #include <windows.h>
 #include <tchar.h> 
 #include <strsafe.h>
+#include <string>
 #pragma comment(lib, "User32.lib")
+#include <algorithm> 
+#include <functional> 
+#include <cctype>
+#include <locale>
 
 
 /*
@@ -31,6 +36,24 @@ InputParser::~InputParser()
 {
 }
 
+static inline std::string &ltrim(std::string &s) {
+	s.erase(s.begin(), std::find_if(s.begin(), s.end(),
+		std::not1(std::ptr_fun<int, int>(std::isspace))));
+	return s;
+}
+
+// trim from end
+static inline std::string &rtrim(std::string &s) {
+	s.erase(std::find_if(s.rbegin(), s.rend(),
+		std::not1(std::ptr_fun<int, int>(std::isspace))).base(), s.end());
+	return s;
+}
+
+// trim from both ends
+static inline std::string &trim(std::string &s) {
+	return ltrim(rtrim(s));
+}
+
 //This function reads the file and saves the data in the matrices of EdgeWeight, FlowMatrix and CapacityMatrix.
 void InputParser::ReadInputFile(string filename)
 {
@@ -39,9 +62,9 @@ void InputParser::ReadInputFile(string filename)
 	//C:\\Users\\mom\\Google Drive\\fall 2016 semester\\design and analysis of algorithms\\my work\\my project\\CS5592Project\\CS5592Project\\CongestedPathInput1.csv
 	ifstream file(filename);
 
-	obj.edgeWeights = obj.floatMatrices(obj.n);
+	//obj.edgeWeights = obj.floatMatrices(obj.n);
 
-	for (int i = 0; i < obj.n; i++) {
+	/*for (int i = 0; i < obj.n; i++) {
 		for (int j = 0; j < obj.n; j++) {
 			if (i == j)
 				obj.edgeWeights[i][j] = 0;
@@ -51,7 +74,7 @@ void InputParser::ReadInputFile(string filename)
 	}
 
 	obj.flowMatrix = obj.AdjacencyMatrix(obj.n);
-	obj.capacityMatrix = obj.AdjacencyMatrix(obj.n);
+	obj.capacityMatrix = obj.AdjacencyMatrix(obj.n);*/
 
 	if (file.good()) {
 		cout << "\nfile exists\n";
@@ -59,11 +82,15 @@ void InputParser::ReadInputFile(string filename)
 		string delimiter = ",";
 		int i, j;
 		size_t pos;
+		int position = 0;
 		string token;
 		while (getline(file, value, '\n')) {
 			pos = 0;
+			value = trim(value);
+			if (value == "")
+				continue;
 			if (value.find("E") != std::string::npos)
-			{
+			{				
 				value = value.substr(3, value.length() - 1);
 				while ((pos = value.find(delimiter)) != std::string::npos) {
 					if (pos == 1)
@@ -116,15 +143,33 @@ void InputParser::ReadInputFile(string filename)
 			}
 			else
 			{
-				while ((pos = value.find(delimiter)) != std::string::npos) {
-					if (pos == 1)
+				while ((pos = value.find(delimiter)) != std::string::npos) {					
+					if (position == 0)
 					{
 						obj.n = stoi(value.substr(0, pos));
+
+						//Shifted initialization right after new value of obj.n
+						obj.edgeWeights = obj.floatMatrices(obj.n);
+						for (int i = 0; i < obj.n; i++) {
+							for (int j = 0; j < obj.n; j++) {
+								if (i == j)
+									obj.edgeWeights[i][j] = 0;
+								else
+									obj.edgeWeights[i][j] = 9999;
+							}
+						}
+
+						obj.flowMatrix = obj.AdjacencyMatrix(obj.n);
+						obj.capacityMatrix = obj.AdjacencyMatrix(obj.n);
+
+						position = position + 1;
+
 					}
 
-					else if (pos == 2)
+					else if (position == 1)
 					{
 						obj.src = stoi(value.substr(0, pos));
+						position = position + 1;
 					}
 					value.erase(0, pos + delimiter.length());
 				}
@@ -322,7 +367,7 @@ int main()
 	InputParser parser;
 
 
-	hFind = FindFirstFile("C:\\Users\\hhstm4\\Source\\Repos\\CS5592Project\\CS5592Project\\Inputs\\*.csv", &data);
+	hFind = FindFirstFile("C:\\Users\\hhstm4\\Source\\Repos\\CS5592Project\\CS5592Project\\Inputs\\*.txt", &data);
 	if (hFind != INVALID_HANDLE_VALUE) {
 		do {
 			cout << "\nThis is the O/P for fileName = ";
