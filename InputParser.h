@@ -8,7 +8,8 @@ class InputParser
 public:
 	InputParser();
 	~InputParser();
-	void ReadInputFile();
+	void ReadInputFile(string filename);
+	//void ReadInputFile();
 	vector<vector<float>> recomputeEdges(vector<vector<float>>,vector<vector<int>>);
 };
 
