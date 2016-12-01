@@ -1,27 +1,32 @@
+/*
+FloydWarshall class retrieves intermediate vertices in a shortest path for all shortest path pairs computed using Floyd-Warshall algorithm.
+*/
+
 #include "FloydWarshall.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <stdio.h>
 #include <conio.h>
-int n = 6;
+
 vector<vector<float>> FloydWarshall::floatMatrices(int n)
 {
 	vector<vector<float>> floatMatrix(n, vector<float>(n, 0.0));
 	return floatMatrix;
 }
-vector<vector<vector<int>>> FloydWarshall::actualShortestPathMatrix(int n)
+
+vector<vector<vector<int>>> FloydWarshall::initializeActualSPMatrix(int n)
 {
-	vector<vector<vector<int>>> aspm(n, vector<vector<int>>(n, vector<int>(0,1)));
-	return aspm;
+	vector<vector<vector<int>>> initializeActualSPM(n, vector<vector<int>>(n, vector<int>(0,1)));
+	return initializeActualSPM;
 }
 
 FloydWarshall::FloydWarshall()
 {
 }
 
-//This function creates an adjacency matrix of the size provided as input. 
-vector<vector<int>> FloydWarshall::AdjacencyMatrix(int n)
+//Function to create an adjacency matrix of the size provided as input n. 
+vector<vector<int>> FloydWarshall::adjacencyMatrix(int n)
 {
 	vector< vector<int> > adj(n, vector<int>(n, 9999));
 	for (int i = 0; i < n; i++)
@@ -47,14 +52,9 @@ int FloydWarshall::actualShortestPath(vector<vector<int>> predecessorMatrix, int
 		actualPathsCal[i][duplicatej].push_back(j);
 		return j;
 	}
-
 }
-
-
-
 
 FloydWarshall::~FloydWarshall()
 {
 
 }
-

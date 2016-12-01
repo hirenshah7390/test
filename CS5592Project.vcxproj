@@ -116,7 +116,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="FloydWarshall.h" />
-    <ClInclude Include="InputParser.h" />
+    <ClInclude Include="SPPrediction.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="sample.h" />
   </ItemGroup>
@@ -125,7 +125,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="InputParser.cpp" />
+    <ClCompile Include="SPPrediction.cpp" />
     <ClCompile Include="scratchpad.cpp" />
   </ItemGroup>
   <ItemGroup>
